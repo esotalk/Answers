@@ -1,4 +1,4 @@
-# esoTalk Answers Plugin
+# Answers Plugin
 
 Allow posters to mark a reply as having answered their question.
 
