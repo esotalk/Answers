@@ -7,7 +7,7 @@ if (!defined("IN_ESOTALK")) exit;
 $conversation = $data["conversation"];
 $post = $data["answer"];
 ?>
-<div class='answer thing hasControls'>
+<div class='embedded-answer thing hasControls'>
 	<div class='postHeader'>
 		<div class='info'>
 			<h3><i class="icon-ok-sign"></i> <?php printf(T("Answered by %s"), memberLink($post["memberId"], $post["username"])); ?></h3>

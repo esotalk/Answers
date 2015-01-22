@@ -21,4 +21,5 @@ Create `definitions.Answers.php` in your language pack with the following defini
 	$definitions["label.answered"] = "Answered";
 	$definitions["Remove answer"] = "Remove answer";
 	$definitions["See post in context"] = "See post in context";
-	$definitions["This post answered my question"] = "This post answered my question";
+	$definitions["This answers my question"] = "This answers my question";
+	$definitions["This answers the question"] = "This answers the question";

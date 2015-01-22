@@ -47,26 +47,29 @@ class ETPlugin_Answers extends ETPlugin {
 	{
 		if ($post["deleteTime"]) return;
 
-		if ($conversation["startMemberId"] == ET::$session->userId or $conversation["canModerate"]) {
-			addToArray($formatted["controls"], "<a href='".URL("conversation/answer/".$post["postId"]."?token=".ET::$session->token)."' title='".T("This post answered my question")."' class='control-answer'><i class='icon-ok-sign'></i></a>");
+		$isAnswer = $conversation["answered"] == $post["postId"];
+		$isFirstPost = $post["memberId"] == $conversation["startMemberId"] && $post["time"] == $conversation["startTime"];
+		$isAuthor = $conversation["startMemberId"] == ET::$session->userId;
+
+		if (!$isFirstPost && ($isAuthor || $conversation["canModerate"]) && !$isAnswer) {
+			$label = $conversation["startMemberId"] == ET::$session->userId ? "This answers my question" : "This answers the question";
+			addToArray($formatted["footer"], "<a href='".URL("conversation/answer/".$post["postId"]."?token=".ET::$session->token)."' class='markAsAnswer'><i class='icon-ok'></i> ".T($label)."</a>", 0);
 		}
 
 		// If this post is the answer...
-		if ($conversation["answered"] == $post["postId"]) {
+		if ($isAnswer) {
+			$formatted["class"][] = "answer";
 			addToArray($formatted["info"], "<span class='label label-answered'><i class='icon-ok-sign'></i> ".T("Answer")."</span>", 100);
 		}
 
 		// If this is the first post in the conversation and there is an answer...
-		if ($conversation["answered"] and $post["memberId"] == $conversation["startMemberId"] and $post["time"] == $conversation["startTime"]) {
+		if ($conversation["answered"] and $isFirstPost) {
 
 			// Get the answer post.
 			$answer = ET::postModel()->getById($conversation["answered"]);
 			$view = $sender->getViewContents("answers/answer", array("answer" => $answer, "conversation" => $conversation));
 
-			// Add this before the "likes" plugin. Bit hacky, but there's no way to prioritize event handlers in esoTalk :(
-			$pos = strpos($formatted["body"], "<p class='likes");
-			if (!$pos) $pos = strlen($formatted["body"]);
-			$formatted["body"] = substr_replace($formatted["body"], $view, $pos, 0);
+			$formatted["body"] = $formatted["body"].$view;
 
 		}
 	}
