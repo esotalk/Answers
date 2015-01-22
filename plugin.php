@@ -45,7 +45,7 @@ class ETPlugin_Answers extends ETPlugin {
 
 	public function handler_conversationController_formatPostForTemplate($sender, &$formatted, $post, $conversation)
 	{
-		if ($post["deleteMemberId"]) return;
+		if ($post["deleteTime"]) return;
 
 		if ($conversation["startMemberId"] == ET::$session->userId or $conversation["canModerate"]) {
 			addToArray($formatted["controls"], "<a href='".URL("conversation/answer/".$post["postId"]."?token=".ET::$session->token)."' title='".T("This post answered my question")."' class='control-answer'><i class='icon-ok-sign'></i></a>");
